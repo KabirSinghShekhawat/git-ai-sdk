@@ -1,7 +1,10 @@
-from enum import Enum
 import os
-from src.run import CodeRunner
+import re
+from enum import Enum
+
 import ollama
+
+from src.run import CodeRunner
 
 
 class Platforms(Enum):
@@ -14,11 +17,14 @@ class APIClient:
         self.model = model
         self.api_key_name = f"{platform.name}_API_KEY"
         self.api_key = os.environ.get(self.api_key_name, "")
-        self.base_prompt = f"""The API key is in `os.environ.get({self.api_key_name})`.
-        Only write code. Do not explain anything. Values for params will be provided.
+        self.base_prompt = f"""
+        The API key can be loaded like this `os.environ.get('{self.api_key_name}')`.
+        Only write code. Do not explain anything.
         Add error handling code, return the response from API directly.
         Wrap all code in <code></code> blocks.
+        Use the params provided below in the format key='value'.
         """
+        self.base_prompt = re.sub(r"\s+", " ", self.base_prompt)
 
     def get_repo_info(self, repo_owner: str, repo_name: str):
         """
@@ -40,7 +46,6 @@ class APIClient:
         :return: JSON response containing user information.
         """
         prompt = self.base_prompt + "Write python code to fetch a username."
-        prompt += "use the values provided below in the format key='value'"
         prompt += f"username='{username}'"
         return self.run_prompt(prompt)
 

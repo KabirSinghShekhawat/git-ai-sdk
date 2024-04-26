@@ -1,6 +1,10 @@
 import unittest
 
+from dotenv import load_dotenv
+
 from src.core.client import APIClient
+
+load_dotenv()  # take environment variables from .env.
 
 
 class TestAPIClient(unittest.TestCase):
