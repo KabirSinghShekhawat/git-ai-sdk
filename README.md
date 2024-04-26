@@ -22,8 +22,10 @@ In this case, the LLM generated and ran the get all users route
 instead of get user by username route.
 
 
-
 https://github.com/KabirSinghShekhawat/git-ai-sdk/assets/51289863/e663c3a4-535f-4804-9c89-0be0caec60ca
 
 ## Architecture
+
+<img width="1160" alt="Github API" src="https://github.com/KabirSinghShekhawat/git-ai-sdk/assets/51289863/c7c493f1-a2e4-420b-9c0d-96417f594a4d">
+
 
