@@ -42,6 +42,14 @@ class APIClient:
         prompt += f"repo_owner='{repo_owner}'|repo_name='{repo_name}'"
         return self.run_prompt(prompt)
 
+    def get_org_repos(
+        self, org_name: str, type: str, sort_by: str, direction: str, limit: int
+    ):
+        prompt = self.base_prompt + "Write python code to fetch repos from an org."
+        prompt += f"org_name='{org_name}'"
+        prompt += f"params: type='{type}'|sort='{sort_by}'|direction='{direction}'|per_page='{limit}'"
+        return self.run_prompt(prompt)
+
     def get_user_info(self, username):
         """
         Get information about a user.

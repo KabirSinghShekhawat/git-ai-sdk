@@ -12,3 +12,5 @@ for the same tests ran successfully before but fails for
 one test case when ran again. This is because of code 
 generation variance and hallucinations.
 
+In this case, the LLM generated and ran the get all users route
+instead of get user by username route.

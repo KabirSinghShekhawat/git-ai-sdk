@@ -24,6 +24,12 @@ class TestAPIClient(unittest.TestCase):
         user = self.api_client.get_user_info("KabirSinghShekhawat")
         self.assertEqual(user.get("id", ""), 51289863)
 
+    def test_get_org_repos(self):
+        repos = self.api_client.get_org_repos(
+            "stackithq", "private", "created_at", "desc", 10
+        )
+        self.assertEqual(len(repos), 1)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
