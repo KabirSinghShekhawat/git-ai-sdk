@@ -9,15 +9,16 @@ from src.data_processing.post_processing import DataProcessor
 
 
 class CodeRunner:
-    def __init__(self, env_map: dict[str, str]) -> None:
+    def __init__(self, env_map: dict[str, str], model: str) -> None:
         os.environ.update(env_map)
+        self.model = model
 
     def run(self, llm_output: str):
         code_block = extract_code_block(llm_output)
         try:
             output = self.execute_command_and_return_output(code_block)
-            output_json = DataProcessor(model="stripe", data=output).to_json()
-            return output_json
+            data = DataProcessor(model=self.model, data=output).to_dict()
+            return data
         except Exception as e:
             print(f"Error evaluating code: {e}")
 
@@ -41,14 +42,16 @@ class CodeRunner:
                 print(e)
                 raise e
 
+        error_log = open(cwd / "error.log", "a")
         process = subprocess.Popen(
             ["python", temp_file_path],
             cwd=cwd,
             stdout=subprocess.PIPE,
-            stderr=open(cwd / "error.log", "w"),
+            stderr=error_log,
         )
         output, error = process.communicate()
         cleanup()
+        error_log.close()
         if error:
             raise Exception(str(error.decode()))
         return output.decode()
