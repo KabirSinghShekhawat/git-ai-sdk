@@ -18,13 +18,17 @@ class APIClient:
         self.api_key_name = f"{platform.name}_API_KEY"
         self.api_key = os.environ.get(self.api_key_name, "")
         self.base_prompt = f"""
-        The API key can be loaded like this `os.environ.get('{self.api_key_name}')`.
         Only write code. Do not explain anything.
         Add error handling code, return the response from API directly.
         Wrap all code in <code></code> blocks.
         Use the params provided below in the format key='value'.
         """
-        self.base_prompt = re.sub(r"\s+", " ", self.base_prompt)
+        self.base_prompt += f"""
+        Use this header => Authorization: "Bearer {{os.environ.get('{self.api_key_name}')}}"
+        """.strip()
+
+        self.base_prompt = re.sub(r"\s+", " ", self.base_prompt).strip()
+        self.base_prompt = re.sub(r"\n+", " ", self.base_prompt).strip()
 
     def get_repo_info(self, repo_owner: str, repo_name: str):
         """
@@ -45,7 +49,7 @@ class APIClient:
         :param username: GitHub username.
         :return: JSON response containing user information.
         """
-        prompt = self.base_prompt + "Write python code to fetch a username."
+        prompt = self.base_prompt + "Write python code to fetch a user by username."
         prompt += f"username='{username}'"
         return self.run_prompt(prompt)
 

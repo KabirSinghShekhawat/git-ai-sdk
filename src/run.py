@@ -15,7 +15,6 @@ class CodeRunner:
         self.model = model
         debug_mode = os.environ.get("DEBUG", "false")
         self.debug = False if debug_mode.upper() == "FALSE" else True
-        print("DEBUG MODE:", debug_mode, self.debug)
 
     def run(self, llm_output: str):
         code_block = extract_code_block(llm_output)
@@ -29,9 +28,9 @@ class CodeRunner:
     def execute_command_and_return_output(self, command):
         cwd = pathlib.Path(__file__).parent
         file_name = f"{generate_random_filename()}.py"
-        temp_file_path = cwd / 'generated_code' / file_name
-        if not exists(cwd / 'generated_code'):
-            os.mkdir(cwd / 'generated_code')
+        temp_file_path = cwd / "generated_code" / file_name
+        if not exists(cwd / "generated_code"):
+            os.mkdir(cwd / "generated_code")
         try:
             with open(temp_file_path, "w+") as f:
                 f.write(command)
